@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useState } from 'react';
+
+//Screens
+import AppStack from './routes/AppStack';
+import AuthStack from './routes/AuthStack';
+
+
+//Creating a stack navigator
+const Stack = createNativeStackNavigator()
 
 export default function App() {
+
+  const [isVerified, setIsVerified] = useState(true)
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+          <Stack.Navigator
+           screenOptions={
+            {
+              headerShown: false
+            }
+           }>
+            {
+              isVerified
+              ? <Stack.Screen name='AppStack' component={AppStack}/>
+              : <Stack.Screen name='AuthStack' component={AuthStack}/>
+            }
+          </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
