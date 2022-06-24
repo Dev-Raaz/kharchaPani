@@ -2,11 +2,12 @@ import {View, Text, Image, Dimensions} from 'react-native'
 import {
     LineChart,
     BarChart,
-    PieChart,
     ProgressChart,
+    PieChart,
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit"
+
 
 
 //styles
@@ -16,21 +17,21 @@ import Buttons from '../../styles/buttons'
 import Images from '../../styles/images'
 import Cards from '../../styles/cards'
 import Variables from '../../styles/variables'
+import SmallDropdownComponent from './SmallDropdown'
 
-import { Line } from 'react-native-svg'
 import { useEffect, useState } from 'react'
 
 import 
 {
     getIntervalMonth, 
     getIntervalWeek, 
-    getIntervalYear, 
     getDiffWeek
 } from '../../utils/getInterval'
 
 
 //-----------------------------------------------------
 //Available Balance
+//-----------------------------------------------------
 export const AvailBalance = ({balance, prevBalance, interval}) => {
 
     return (
@@ -76,6 +77,10 @@ export const IncomeChart = ({incomes}) => {
     const [change, setChange] = useState(0)
     const [rate, setRate] = useState(0)
 
+    const types = [
+        { label: 'Monthly', value: 'month' },
+        { label: 'Weekly', value: 'week' }
+      ]
 
     useEffect(()=>{
         if(incomes !== null){
@@ -89,13 +94,10 @@ export const IncomeChart = ({incomes}) => {
             else if(interval === 'month'){
                 const temp = getIntervalMonth(incomes)
                 setPointsData(temp)
-            }else if(interval === 'year'){
-                const temp = getIntervalYear(incomes)
-                setPointsData(temp)
             }
         }
         
-    },[incomes])
+    },[incomes, interval])
 
     //---------------------------------------------------------
     //Chart Section
@@ -104,7 +106,7 @@ export const IncomeChart = ({incomes}) => {
     const data = {
         labels: interval == 'month' ? ['week1', 'week2', 'week3', 'week4'] 
         : interval == 'year' ? ['quarter1', 'quarter2', 'quarter3', 'quarter4']
-        : ['S','M','T','W','T','F','S'], 
+        : ['D1','D2','D3','D4','D5','D6','D7'], 
         datasets: [
           {
             data: pointsData,
@@ -137,8 +139,8 @@ export const IncomeChart = ({incomes}) => {
             <View style={Containers.bottomM}>
                 <View style={Containers.topL}>
                     <View style={Containers.flexHor}>
-                        <Text style={Typography.h3}>Income Chart</Text>
-                        <Text>Monthly</Text>
+                        <Text style={Typography.h3}>Income Rate</Text>
+                        <SmallDropdownComponent data={types} value={interval} setValue={setInterval} label={'Interval'}/>
                     </View>
                 </View>
             </View>
@@ -185,6 +187,10 @@ export const ExpenseChart = ({expenses}) => {
     const [change, setChange] = useState(0)
     const [rate, setRate] = useState(0)
 
+    const types = [
+        { label: 'Monthly', value: 'month' },
+        { label: 'Weekly', value: 'week' }
+      ]
 
     useEffect(()=>{
         if(expenses !== null){
@@ -198,13 +204,10 @@ export const ExpenseChart = ({expenses}) => {
             else if(interval === 'month'){
                 const temp = getIntervalMonth(expenses)
                 setPointsData(temp)
-            }else if(interval === 'year'){
-                const temp = getIntervalYear(expenses)
-                setPointsData(temp)
             }
         }
         
-    },[expenses])
+    },[expenses, interval])
 
     //---------------------------------------------------------
     //Chart Section
@@ -246,8 +249,8 @@ export const ExpenseChart = ({expenses}) => {
             <View style={Containers.bottomM}>
                 <View style={Containers.topL}>
                     <View style={Containers.flexHor}>
-                        <Text style={Typography.h3}>Income Chart</Text>
-                        <Text>Monthly</Text>
+                        <Text style={Typography.h3}>Expense Rate</Text>
+                        <SmallDropdownComponent data={types} value={interval} setValue={setInterval} label={'Interval'}/>
                     </View>
                 </View>
             </View>
@@ -282,5 +285,196 @@ export const ExpenseChart = ({expenses}) => {
         </View>
     )
 }
+
+export const IncomePie = ({incomes}) => {
+
+    const data = [
+        {
+            name: "Seoul",
+            population: 5150,
+            color: "#25CC8F"
+          },
+          {
+            name: "Toronto",
+            population: 2800,
+            color: "#84E2C0"
+          },
+          {
+            name: "Beijing",
+            population: 1276,
+            color: "#C8F2E3"
+          }
+    ]
+
+    const widthChart = Dimensions.get('window').width - 4*Variables.sizes.szM
+
+    const chartConfig = {
+        backgroundGradientFrom: "#1E2923",
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientTo: "#08130D",
+        backgroundGradientToOpacity: 0.0,
+        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        strokeWidth: 2, // optional, default 3
+        barPercentage: 0.5,
+        useShadowColorFromDataset: false // optional
+      };
+
+    
+    //Guard
+    if(incomes == null)
+    return null
+
+    return (
+        <View>
+            
+            <View style={Containers.bottomM}>
+                <View style={Containers.topL}>
+                    <View style={Containers.flexHor}>
+                        <Text style={Typography.h3}>Income Chart</Text>
+                        <Text>Weekly</Text>
+                    </View>
+                </View>
+            </View>
+
+            <View style={Cards.incomeCardFlex}>
+            <PieChart
+                data={data}
+                width={200}
+                height={150}
+                chartConfig={chartConfig}
+                accessor={"population"}
+                backgroundColor={"transparent"}
+                paddingLeft={"15"}
+                absolute
+                hasLegend={false}
+            />
+            <View style={Cards.incomeCardFlexLabels}>
+                
+                <View style={Cards.incomePieLabel}>
+                    <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#25CC8F'}}></View>
+                    <View>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Shop</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    </View>
+                </View>
+                
+                <View style={Cards.incomePieLabel}>
+                    <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#84E2C0'}}></View>
+                    <View>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Grocerry</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    </View>
+                </View>
+
+                <View style={Cards.incomePieLabel}>
+                    <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#C8F2E3'}}></View>
+                    <View>
+                        <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Music</Text>
+                        <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    </View>
+                </View>
+
+            </View>
+
+            </View>
+
+        </View>
+    )
+}
+
+export const ExpensePie = ({expenses}) => {
+    const data = [
+        {
+            name: "Seoul",
+            population: 5150,
+            color: "#FF348C"
+          },
+          {
+            name: "Toronto",
+            population: 2800,
+            color: "#FF85BA"
+          },
+          {
+            name: "Beijing",
+            population: 1276,
+            color: "#FFD0E4"
+          }
+    ]
+
+
+    const chartConfig = {
+        backgroundGradientFrom: "#1E2923",
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientTo: "#08130D",
+        backgroundGradientToOpacity: 0.0,
+        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        strokeWidth: 2, // optional, default 3
+        barPercentage: 0.5,
+        useShadowColorFromDataset: false // optional
+      };
+
+    //Guard
+    if(expenses == null)
+    return null
+
+    return (
+        <View>
+            
+            <View style={Containers.bottomM}>
+                <View style={Containers.topL}>
+                    <View style={Containers.flexHor}>
+                        <Text style={Typography.h3}>Expense Chart</Text>
+                        <Text>Weekly</Text>
+                    </View>
+                </View>
+            </View>
+
+            <View style={Cards.incomeCardFlex}>
+            <PieChart
+                data={data}
+                width={200}
+                height={150}
+                chartConfig={chartConfig}
+                accessor={"population"}
+                backgroundColor={"transparent"}
+                paddingLeft={"15"}
+                absolute
+                hasLegend={false}
+            />
+            <View style={Cards.incomeCardFlexLabels}>
+                
+                <View style={Cards.incomePieLabel}>
+                    <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#FF348C'}}></View>
+                    <View>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Shop</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    </View>
+                </View>
+                
+                <View style={Cards.incomePieLabel}>
+                    <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#FF85BA'}}></View>
+                    <View>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Grocerry</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    </View>
+                </View>
+
+                <View style={Cards.incomePieLabel}>
+                    <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#FFD0E4'}}></View>
+                    <View>
+                        <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Music</Text>
+                        <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    </View>
+                </View>
+
+            </View>
+
+            </View>
+
+        </View>
+    )
+   
+}
+
 
 export default AvailBalance

@@ -7,8 +7,9 @@ export default Buttons = StyleSheet.create({
         padding: Variables.sizes.szXl,
         paddingTop: Variables.sizes.szS,
         paddingBottom: Variables.sizes.szS,
-        borderRadius: Variables.radius.m,
-        backgroundColor: Variables.color.prmColor
+        borderRadius: 100,
+        backgroundColor: Variables.color.prmColor,
+        width: '100%'
     },
 
     btnPrmTxt: {
@@ -21,7 +22,7 @@ export default Buttons = StyleSheet.create({
         padding: Variables.sizes.szL,
         paddingTop: Variables.sizes.szS,
         paddingBottom: Variables.sizes.szS,
-        borderRadius: Variables.radius.m,
+        borderRadius: 100,
         borderWidth: 1,
         borderColor: Variables.color.prmColor
     },

@@ -6,7 +6,12 @@ export default Containers = StyleSheet.create({
         padding: Variables.sizes.szM,
         backgroundColor: Variables.color.secColor
     },
-
+    mainFull: {
+        padding: Variables.sizes.szM,
+        backgroundColor: Variables.color.secColor,
+        flex: 1
+    },
+    
     mainCenter: {
         padding: Variables.sizes.szM,
         backgroundColor: Variables.color.secColor,
@@ -20,14 +25,16 @@ export default Containers = StyleSheet.create({
     },
 
     topXl: {
-        marginTop: Variables.sizes.szXl
+        marginTop: Variables.sizes.szXl,
+        width: '100%'
     },
     topL: {
         marginTop: Variables.sizes.szL
     },
 
     topM: {
-        marginTop: Variables.sizes.szM
+        marginTop: Variables.sizes.szM,
+        width: '100%'
     },
 
     topS: {
@@ -62,5 +69,10 @@ export default Containers = StyleSheet.create({
     flexHorNorm: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+
+    fullWidth: {
+        width: '100%'
     }
+
 })

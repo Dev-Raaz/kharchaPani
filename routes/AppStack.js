@@ -3,7 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //Screens
 import Home from '../screens/Home';
 import ChangePassword from '../screens/ChangePassword';
-import OTPVerification from '../screens/OTPVerification';
+import Verification from '../screens/Verification';
+import AddCategory from '../screens/AddCategory';
+import RemoveCategory from '../screens/RemoveCategory';
 
 //Creating Staack Navigator
 const Stack = createNativeStackNavigator()
@@ -17,6 +19,7 @@ const AppStack = () => {
             component={Home}
             options={{
                 headerBackVisible: false,
+                headerShown: false,
                 title: 'Kharcha Pani'
             }}/>
             
@@ -29,10 +32,26 @@ const AppStack = () => {
             />
             
             <Stack.Screen
-                name='OTPVerification'
-                component={OTPVerification}
+                name='Verification'
+                component={Verification}
                 options={{
-                    title: "OTP Verification"
+                    title: "Verification"
+                }}
+            />
+            
+            <Stack.Screen
+                name='AddCategory'
+                component={AddCategory}
+                options={{
+                    title: "Add Category"
+                }}
+            />
+            
+            <Stack.Screen
+                name='RemoveCategory'
+                component={RemoveCategory}
+                options={{
+                    title: "Remove Category"
                 }}
             />
 

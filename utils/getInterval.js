@@ -1,39 +1,40 @@
-import transactions from '../assets/data'
 
 
 //get by quarter
-export const getIntervalYear = (data) => {
+// export const getIntervalYear = (data) => {
     
-    function getQuarter(date = new Date()) {
-        return Math.floor(date.getMonth() / 3 + 1);
-    }
+//     function getQuarter(date = new Date()) {
+//         return Math.floor(date.getMonth() / 3 + 1);
+//     }
 
-    //Stores Quarterly Amounts
-    let quarterlyAmounts =[]
-    const curDate = new Date() 
-    let quarters = [
-        {amount: 0},
-        {amount: 0},
-        {amount: 0},
-        {amount: 0} 
-    ]
+//     //Stores Quarterly Amounts
+//     let quarterlyAmounts =[]
+//     const curDate = new Date() 
+//     let quarters = [
+//         {amount: 0},
+//         {amount: 0},
+//         {amount: 0},
+//         {amount: 0} 
+//     ]
 
     
-    data.map(datum=>{
-        if(datum.date.getFullYear() === curDate.getFullYear()){
-            quarters[getQuarter(datum.date)-1].amount = quarters[getQuarter(datum.date)-1].amount + datum.amount 
-        }
-    })
+//     data.map(datum=>{
+//         if(datum.date.getFullYear() === curDate.getFullYear()){
+//             quarters[getQuarter(datum.date)-1].amount = quarters[getQuarter(datum.date)-1].amount + datum.amount 
+//         }
+//     })
 
-    //Setting the quarterly amounts
-    quarterlyAmounts = [quarters[0].amount, quarters[1].amount, quarters[2].amount, quarters[3].amount]
+//     //Setting the quarterly amounts
+//     quarterlyAmounts = [quarters[0].amount, quarters[1].amount, quarters[2].amount, quarters[3].amount]
 
-    console.log('Quarterly Amounts')
-    console.log(quarterlyAmounts)
+//     console.log('Quarterly Amounts')
+//     console.log(quarterlyAmounts)
     
 
-    return quarterlyAmounts
-}
+//     return quarterlyAmounts
+// }
+
+
 
 //get by month
 export const getIntervalMonth = (data) => {
@@ -73,11 +74,11 @@ export const getIntervalMonth = (data) => {
 
         data.map((datum)=>{
 
-            console.log(datum.date)
+            let DATE = new Date(datum.createdAt)
 
-            const validator1 = datum.date.getTime() >=  week.start.getTime()
+            const validator1 = DATE.getTime() >=  week.start.getTime()
             
-            const validator2 = datum.date.getTime() < week.end.getTime()
+            const validator2 = DATE.getTime() < week.end.getTime()
                                                           
             if(validator1 && validator2){
                 week.amount = week.amount + datum.amount
@@ -155,9 +156,11 @@ export const getIntervalWeek = (data) => {
         
         data.map(datum => {
             
-            const validator = day.date.getFullYear() === datum.date.getFullYear()
-                              && day.date.getMonth() === datum.date.getMonth()
-                              && day.date.getDate() === datum.date.getDate()
+            let DATE = new Date(datum.createdAt)
+
+            const validator = day.date.getFullYear() === DATE.getFullYear()
+                              && day.date.getMonth() === DATE.getMonth()
+                              && day.date.getDate() === DATE.getDate()
 
 
             if(validator){
@@ -182,8 +185,10 @@ export const getDiffWeek = (data) => {
     let lastWeekTotal = 0
     data.map(datum => {
         
-        const validator = datum.date.getTime() < lastWeek &&
-                          datum.date.getTime() > lastWeek - 6*24*60*60*1000  
+        let DATE = new Date(datum.createdAt)
+
+        const validator = DATE.getTime() < lastWeek &&
+                          DATE.getTime() > lastWeek - 6*24*60*60*1000  
 
         if(validator){
             lastWeekTotal = lastWeekTotal + datum.amount        
@@ -192,8 +197,10 @@ export const getDiffWeek = (data) => {
 
     let curWeekTotal = 0
     data.map(datum=>{
-        const validator = datum.date.getTime() < curWeek &&
-                          datum.date.getTime() > curWeek - 6*24*60*60*1000
+        
+        let DATE = new Date(datum.createdAt)
+        const validator = DATE.getTime() < curWeek &&
+                          DATE.getTime() > curWeek - 6*24*60*60*1000
 
         if(validator){
             curWeekTotal = curWeekTotal + datum.amount
@@ -213,9 +220,11 @@ export const getDiffMonth = (data) => {
     
     let lastMonthTotal = 0
     data.map(datum => {
-        
-        const validator = datum.date.getTime() < lastMonth &&
-                          datum.date.getTime() > lastMonth - 28*24*60*60*1000  
+
+        let DATE = new Date(datum.createdAt)
+
+        const validator = DATE.getTime() < lastMonth &&
+                          DATE.getTime() > lastMonth - 28*24*60*60*1000  
 
         if(validator){
             lastMonthTotal = lastMonthTotal + datum.amount        
@@ -224,8 +233,11 @@ export const getDiffMonth = (data) => {
 
     let curMonthTotal = 0
     data.map(datum=>{
-        const validator = datum.date.getTime() < curMonth &&
-                          datum.date.getTime() > curMonth - 27*24*60*60*1000
+        
+        let DATE = new Date(datum.createdAt)
+
+        const validator = DATE.getTime() < curMonth &&
+                          DATE.getTime() > curMonth - 27*24*60*60*1000
 
         if(validator){
             curMonthTotal = curMonthTotal + datum.amount

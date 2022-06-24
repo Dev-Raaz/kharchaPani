@@ -1,8 +1,8 @@
 import Svg, {Path, Text, G, TSpan} from "react-native-svg";
 
-const LogoIcon = () => {
+const LogoIcon = ({height, width}) => {
     return(
-        <Svg xmlns="http://www.w3.org/2000/svg" width="16.694" height="24" viewBox="0 0 16.694 24">
+        <Svg xmlns="http://www.w3.org/2000/svg" width={width || "16.694"} height={height || "24"} viewBox="0 0 16.694 24">
             <G id="Logo" transform="translate(-80 -137)">
             <G id="Group_23" data-name="Group 23" transform="translate(80 137)">
             <Path id="Path_17" data-name="Path 17" d="M1920.115,2072.373c-.473-.014-1.459,4.4-6.15,8.551s-2.288,13.815,5.711,13.719,9.678-8.907,5.865-13.091S1920.588,2072.387,1920.115,2072.373Z" transform="translate(-1911.582 -2072.373)" fill="#8383ff"/>
