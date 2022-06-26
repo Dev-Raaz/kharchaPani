@@ -19,14 +19,21 @@ import Cards from '../../styles/cards'
 import Variables from '../../styles/variables'
 import SmallDropdownComponent from './SmallDropdown'
 
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import 
 {
     getIntervalMonth, 
     getIntervalWeek, 
-    getDiffWeek
+    getDiffWeek,
+    getTopPieWeek,
+    getTopPieMonth,
+    getTopPieMonthExp,
+    getTopPieWeekExp
 } from '../../utils/getInterval'
+import axios from 'axios'
+import API_BASE from '../../config/api'
+import { AuthContext } from '../context'
 
 
 //-----------------------------------------------------
@@ -40,19 +47,6 @@ export const AvailBalance = ({balance, prevBalance, interval}) => {
                 <Text style={Typography.pBold}>Available Balance</Text>
                 <View style={Containers.topS}>
                     <Text style={Typography.h2Prm}>{`₹ ${balance !== '' ? balance : 0}`}</Text>
-                </View>
-                
-                <View style={Containers.topS}>
-                    <View style={Containers.flexHor}>
-                        <Text style={balance > prevBalance ? Typography.greenP : Typography.redP}>
-                            {
-                                balance > prevBalance
-                                ? `+₹${balance-prevBalance}`
-                                : `-₹${prevBalance-balance}`
-                            }
-                        </Text>
-                        <Text> than last {interval || 'time'}</Text>
-                    </View>
                 </View>
 
             </View>
@@ -286,27 +280,79 @@ export const ExpenseChart = ({expenses}) => {
     )
 }
 
-export const IncomePie = ({incomes}) => {
 
-    const data = [
+export const IncomePie = ({incomes, categories}) => {
+
+    const {getUserName} = useContext(AuthContext)
+    //const [categories, setCategories]= useState(null)
+    const [interval, setInterval] = useState('week')
+
+    const types = [
+        { label: 'Monthly', value: 'month' },
+        { label: 'Weekly', value: 'week' }
+    ]
+
+    const [data, setData] = useState([
         {
-            name: "Seoul",
-            population: 5150,
+            name: "None",
+            sum: 1,
             color: "#25CC8F"
           },
           {
-            name: "Toronto",
-            population: 2800,
+            name: "None",
+            sum: 1,
             color: "#84E2C0"
           },
           {
-            name: "Beijing",
-            population: 1276,
+            name: "None",
+            sum: 1,
             color: "#C8F2E3"
           }
-    ]
+    ])
 
-    const widthChart = Dimensions.get('window').width - 4*Variables.sizes.szM
+    //USE EFFECT
+    //Plays when a categories update is recieved
+    useEffect(()=>{
+        setCats()
+    }, [categories, interval, incomes])
+
+
+    //Updates the categories
+    const setCats = async() => {
+        const username = getUserName()
+        // const {data} = await axios.get(`${API_BASE}/categories/user/${username}`)
+        // setCategories(data)
+
+        // console.log(`Got Categories . . .🤙`)
+        // console.log(data)
+        
+
+        try{
+            if(categories !== null && incomes !== null){
+                console.log(`Setting Income Categories for user ${username}`)
+                if(interval == 'week'){
+                    const topCats = getTopPieWeek(incomes, categories, '#25CC8F', '#84E2C0', '#C8F2E3')
+    
+                    console.log(`Weekly Incomes 💸`)
+                    console.log(topCats)
+                    // console.log(`Successfully Got Top Cats 🤟`)
+                    setData(topCats)
+                }else{
+                    const topCats = getTopPieMonth(incomes, categories, '#25CC8F', '#84E2C0', '#C8F2E3')
+    
+                    
+                    console.log(`Monthly Incomes 💸`)
+                    console.log(topCats)
+                    // console.log(`Successfully Got Top Cats 🤟`)
+                    setData(topCats)
+                }
+            }
+        }catch(err){
+            console.log(`Error: ${err}`)
+        }
+    }
+
+
 
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
@@ -331,7 +377,7 @@ export const IncomePie = ({incomes}) => {
                 <View style={Containers.topL}>
                     <View style={Containers.flexHor}>
                         <Text style={Typography.h3}>Income Chart</Text>
-                        <Text>Weekly</Text>
+                        <SmallDropdownComponent data={types} value={interval} setValue={setInterval} label={'Interval'}/>
                     </View>
                 </View>
             </View>
@@ -342,7 +388,7 @@ export const IncomePie = ({incomes}) => {
                 width={200}
                 height={150}
                 chartConfig={chartConfig}
-                accessor={"population"}
+                accessor={"sum"}
                 backgroundColor={"transparent"}
                 paddingLeft={"15"}
                 absolute
@@ -353,24 +399,24 @@ export const IncomePie = ({incomes}) => {
                 <View style={Cards.incomePieLabel}>
                     <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#25CC8F'}}></View>
                     <View>
-                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Shop</Text>
-                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>{data[0].name}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹${data[0].sum}`}</Text>
                     </View>
                 </View>
                 
                 <View style={Cards.incomePieLabel}>
                     <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#84E2C0'}}></View>
                     <View>
-                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Grocerry</Text>
-                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>{data[1].name}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹${data[1].sum}`}</Text>
                     </View>
                 </View>
 
                 <View style={Cards.incomePieLabel}>
                     <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#C8F2E3'}}></View>
                     <View>
-                        <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Music</Text>
-                        <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                        <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>{data[2].name}</Text>
+                        <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹${data[2].sum}`}</Text>
                     </View>
                 </View>
 
@@ -382,25 +428,69 @@ export const IncomePie = ({incomes}) => {
     )
 }
 
-export const ExpensePie = ({expenses}) => {
-    const data = [
+export const ExpensePie = ({expenses, categories}) => {
+
+    const {getUserName} = useContext(AuthContext)
+    // const [categories, setCategories]= useState(null)
+    const [interval, setInterval] = useState('week')
+
+    const types = [
+        { label: 'Monthly', value: 'month' },
+        { label: 'Weekly', value: 'week' }
+    ]
+
+    const [data,setData] = useState([
         {
-            name: "Seoul",
-            population: 5150,
+            name: "None",
+            sum: 1,
             color: "#FF348C"
           },
           {
-            name: "Toronto",
-            population: 2800,
+            name: "None",
+            sum: 1,
             color: "#FF85BA"
           },
           {
-            name: "Beijing",
-            population: 1276,
+            name: "None",
+            sum: 1,
             color: "#FFD0E4"
           }
-    ]
+    ])
 
+    
+    //USE EFFECT
+    useEffect(()=>{
+        setCats()
+    }, [categories, expenses, interval])
+
+    //Updates the categories
+    const setCats = async() => {
+        const username =getUserName()
+
+        try{
+
+            if(expenses != null && categories !== null){
+                console.log(`Setting Expense Categories for user ${username}`)
+                if(interval == 'week'){
+                    const topCats = getTopPieWeek(expenses, categories, '#FF348C', '#FF85BA', '#FFD0E4')
+    
+                    console.log(`Expenses Week`)
+                    console.log(topCats)
+                    // console.log(`Successfully Got Top Cats 🤟`)
+                    setData(topCats)
+                }else{
+                    const topCats = getTopPieMonth(expenses, categories, '#FF348C', '#FF85BA', '#FFD0E4')
+    
+                    console.log(`Expenses Monthly`)
+                    console.log(topCats)
+                    // console.log(`Successfully Got Top Cats 🤟`)
+                    setData(topCats)
+                }
+            }
+        }catch(err){
+            console.log(`Error: ${err}`)
+        }
+    }
 
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
@@ -424,7 +514,7 @@ export const ExpensePie = ({expenses}) => {
                 <View style={Containers.topL}>
                     <View style={Containers.flexHor}>
                         <Text style={Typography.h3}>Expense Chart</Text>
-                        <Text>Weekly</Text>
+                        <SmallDropdownComponent data={types} value={interval} setValue={setInterval} label={'Interval'}/>
                     </View>
                 </View>
             </View>
@@ -435,7 +525,7 @@ export const ExpensePie = ({expenses}) => {
                 width={200}
                 height={150}
                 chartConfig={chartConfig}
-                accessor={"population"}
+                accessor={"sum"}
                 backgroundColor={"transparent"}
                 paddingLeft={"15"}
                 absolute
@@ -446,24 +536,24 @@ export const ExpensePie = ({expenses}) => {
                 <View style={Cards.incomePieLabel}>
                     <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#FF348C'}}></View>
                     <View>
-                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Shop</Text>
-                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>{data[0].name}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹${data[0].sum}`}</Text>
                     </View>
                 </View>
                 
                 <View style={Cards.incomePieLabel}>
                     <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#FF85BA'}}></View>
                     <View>
-                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Grocerry</Text>
-                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>{data[1].name}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹${data[1].sum}`}</Text>
                     </View>
                 </View>
 
                 <View style={Cards.incomePieLabel}>
                     <View style={{height: 30, width: 30, borderRadius: 6, backgroundColor: '#FFD0E4'}}></View>
                     <View>
-                        <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>Music</Text>
-                        <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹1000`}</Text>
+                        <Text style={{marginLeft: 10, fontSize: 12, marginBottom: 4}}>{data[2].name}</Text>
+                        <Text style={{marginLeft: 10, fontSize: 10, fontWeight: 'bold'}}>{`₹${data[2].sum}`}</Text>
                     </View>
                 </View>
 

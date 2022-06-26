@@ -58,6 +58,7 @@ const ShouldDeleteCategory = ({setShouldDelete, catId, setCatId, changed, setCha
             setShouldDelete(false)
             setChanged(!changed)
             setLoading(false)
+            setAddedCategory(!addedCategory)
 
             console.log(`Deleted: ${data.name}`)
         }catch(err){

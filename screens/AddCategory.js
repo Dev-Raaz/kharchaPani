@@ -48,7 +48,7 @@ const AddCategory = ()=> {
                 type: type,
                 username: username
             })
-
+            
             if(data.username == username){
                 setLoading(false)
                 setSuccess(`Added category ${name}`)
@@ -81,7 +81,7 @@ const AddCategory = ()=> {
                 onPress={handlePress}>
                     <Text style={Buttons.btnPrmTxt}>
                         {
-                            loading ? 'Loading . . .' : 'Add Transaction'
+                            loading ? 'Loading . . .' : 'Add Category'
                         }
                     </Text>
                 </TouchableOpacity>

@@ -250,5 +250,418 @@ export const getDiffMonth = (data) => {
     }
 }
 
+export const getTopPieWeek = (data, cats, c1, c2, c3) => {
+
+    console.log(`Recieved Categories ✌️`)
+    console.log(cats)
+
+    //Start end date
+    const lastWeek = new Date().getTime() - 24*60*60*1000*6
+    const curWeek = new Date().getTime()
+    
+    
+    //Getting the last week data
+    const lastWeekData = data.filter(datum=>{
+        
+        let DATE = new Date(datum.createdAt)
+
+        if(DATE.getTime() > lastWeek && DATE.getTime() <= curWeek ){
+            return datum
+        }
+    })
+
+    let categories = []
+
+    //Getting the categories of last week
+    lastWeekData.map(datum => {
+        if(!categories.includes(datum.category)){
+            categories.push(datum.category)
+        }
+    })
+
+
+    //Get categories sum
+    let catSum = []
+    categories.map(
+        cat => {
+            let sum = 0
+            lastWeekData.map(datum=>{
+                if(datum.category == cat){
+                    sum = sum + datum.amount
+                }
+            })
+
+            //Creating a new category
+            let item = {
+                name: cat,
+                sum: sum
+            }
+
+            //Pushing the sum and cat id
+            catSum.push(item)
+        }
+    )
+
+    //-------------------------------------------
+    //Sorting the catSum array
+    //Our Compare Function
+    function compare(a,b){
+        if(a.sum > b.sum){
+            return -1
+        }else{
+            return 1
+        }
+
+        return 0
+    }
+
+    //Sorting the items
+    catSum = catSum.sort(compare)
+
+    //Selecting top 3
+    let top3 = [
+        {name: 'None', sum: 0, color: c1},
+        {name: 'None', sum: 0, color: c2},
+        {name: 'None', sum: 0, color: c3}
+    ]
+
+    for(let i = 0; i<catSum.length; i++){
+        if(i<3){
+            top3[i] = {...catSum[i], color: (top3[i].color)}
+        }else{
+            break
+        }
+    }
+
+    console.log(`Top 3`)
+    console.log(top3)
+
+    //Getting categories names
+    top3.map(top => {
+        cats.map(cat=>{
+            if(cat._id == top.name){
+                top.name = cat.name
+            }
+        })
+    })
+    
+
+    return top3
+
+}
+
+export const getTopPieMonth = (data, cats, c1, c2, c3) => {
+
+    console.log(`Recieved Categories ✌️`)
+    console.log(cats)
+
+    //Start end date
+    const lastMonth = new Date().getTime() - 24*60*60*1000*27
+    const curMonth = new Date().getTime()
+    
+    
+    //Getting the last week data
+    const lastMonthData = data.filter(datum=>{
+        
+        let DATE = new Date(datum.createdAt)
+
+        if(DATE.getTime() > lastMonth && DATE.getTime() <= curMonth ){
+            return datum
+        }
+    })
+
+    let categories = []
+
+    //Test 1
+    console.log('Last Month Categories')
+    console.log(lastMonthData)
+
+    //Getting the categories of last week
+    lastMonthData.map(datum => {
+        if(!categories.includes(datum.category)){
+            categories.push(datum.category)
+        }
+    })
+
+
+    //Get categories sum
+    let catSum = []
+    categories.map(
+        cat => {
+            let sum = 0
+            lastMonthData.map(datum=>{
+                if(datum.category == cat){
+                    sum = sum + datum.amount
+                }
+            })
+
+            //Creating a new category
+            let item = {
+                name: cat,
+                sum: sum
+            }
+
+            //Pushing the sum and cat id
+            catSum.push(item)
+        }
+    )
+
+    //-------------------------------------------
+    //Sorting the catSum array
+    //Our Compare Function
+    function compare(a,b){
+        if(a.sum > b.sum){
+            return -1
+        }else{
+            return 1
+        }
+
+        return 0
+    }
+
+    //Sorting the items
+
+    catSum = catSum.sort(compare)
+    
+    //Test 2
+    console.log('Sorted catsum ⭐')
+    console.log(catSum)
+
+    //Selecting top 3
+    let top3 = [
+        {name: 'None', sum: 0, color: c1},
+        {name: 'None', sum: 0, color: c2},
+        {name: 'None', sum: 0, color: c3}
+    ]
+
+    for(let i = 0; i<catSum.length; i++){
+        if(i<3){
+            top3[i] = {...catSum[i], color: (top3[i].color)}
+        }else{
+            break
+        }
+    }
+
+    console.log(`Top 3`)
+    console.log(top3)
+
+    //Getting categories names
+    top3.map(top => {
+        cats.map(cat=>{
+            if(cat._id == top.name){
+                top.name = cat.name
+            }
+        })
+    })
+    
+    console.log(`Top3`)
+    console.log(top3)
+
+    return top3
+
+}
+
+export const getTopPieWeekExp = (data, cats, c1, c2, c3) => {
+
+    console.log(`Recieved Categories ✌️`)
+    console.log(cats)
+
+    //Start end date
+    const lastWeek = new Date().getTime() - 24*60*60*1000*6
+    const curWeek = new Date().getTime()
+    
+    
+    //Getting the last week data
+    const lastWeekData = data.filter(datum=>{
+        
+        let DATE = new Date(datum.createdAt)
+
+        if(DATE.getTime() > lastWeek && DATE.getTime() <= curWeek ){
+            return datum
+        }
+    })
+
+    let categories = []
+
+    //Getting the categories of last week
+    lastWeekData.map(datum => {
+        if(!categories.includes(datum.category)){
+            categories.push(datum.category)
+        }
+    })
+
+
+    //Get categories sum
+    let catSum = []
+    categories.map(
+        cat => {
+            let sum = 0
+            lastWeekData.map(datum=>{
+                if(datum.category == cat){
+                    sum = sum + datum.amount
+                }
+            })
+
+            //Creating a new category
+            let item = {
+                name: cat,
+                sum: sum
+            }
+
+            //Pushing the sum and cat id
+            catSum.push(item)
+        }
+    )
+
+    //-------------------------------------------
+    //Sorting the catSum array
+    //Our Compare Function
+    function compare(a,b){
+        if(a.sum > b.sum){
+            return -1
+        }else{
+            return 1
+        }
+
+        return 0
+    }
+
+    //Sorting the items
+    catSum = catSum.sort(compare)
+
+    //Selecting top 3
+    let top3 = [
+        {name: 'None', sum: 0, color: c1},
+        {name: 'None', sum: 0, color: c2},
+        {name: 'None', sum: 0, color: c3}
+    ]
+
+    for(let i = 0; i<catSum.length; i++){
+        if(i<3){
+            top3[i] = {...catSum[i], color: (top3[i].color)}
+        }else{
+            break
+        }
+    }
+
+    console.log(`Top 3`)
+    console.log(top3)
+
+    //Getting categories names
+    top3.map(top => {
+        cats.map(cat=>{
+            if(cat._id == top.name){
+                top.name = cat.name
+            }
+        })
+    })
+    
+
+    return top3
+
+}
+
+export const getTopPieMonthExp = (data, cats, c1, c2, c3) => {
+
+    console.log(`Recieved Categories ✌️`)
+    console.log(cats)
+
+    //Start end date
+    const lastWeek = new Date().getTime() - 24*60*60*1000*27
+    const curWeek = new Date().getTime()
+    
+    
+    //Getting the last week data
+    const lastWeekData = data.filter(datum=>{
+        
+        let DATE = new Date(datum.createdAt)
+
+        if(DATE.getTime() > lastWeek && DATE.getTime() <= curWeek ){
+            return datum
+        }
+    })
+
+    let categories = []
+
+    //Getting the categories of last week
+    lastWeekData.map(datum => {
+        if(!categories.includes(datum.category)){
+            categories.push(datum.category)
+        }
+    })
+
+
+    //Get categories sum
+    let catSum = []
+    categories.map(
+        cat => {
+            let sum = 0
+            lastWeekData.map(datum=>{
+                if(datum.category == cat){
+                    sum = sum + datum.amount
+                }
+            })
+
+            //Creating a new category
+            let item = {
+                name: cat,
+                sum: sum
+            }
+
+            //Pushing the sum and cat id
+            catSum.push(item)
+        }
+    )
+
+    //-------------------------------------------
+    //Sorting the catSum array
+    //Our Compare Function
+    function compare(a,b){
+        if(a.sum > b.sum){
+            return -1
+        }else{
+            return 1
+        }
+
+        return 0
+    }
+
+    //Sorting the items
+    console.log('Sorted . . .')
+    catSum = catSum.sort(compare)
+
+    //Selecting top 3
+    let top3 = [
+        {name: 'None', sum: 0, color: c1},
+        {name: 'None', sum: 0, color: c2},
+        {name: 'None', sum: 0, color: c3}
+    ]
+
+    for(let i = 0; i<catSum.length; i++){
+        if(i<3){
+            top3[i] = {...catSum[i], color: (top3[i].color)}
+        }else{
+            break
+        }
+    }
+
+    console.log(`Top 3`)
+    console.log(top3)
+
+    //Getting categories names
+    top3.map(top => {
+        cats.map(cat=>{
+            if(cat._id == top.name){
+                top.name = cat.name
+            }
+        })
+    })
+    
+    console.log(`Top3`)
+    console.log(top3)
+
+    return top3
+
+}
 
 export default getIntervalWeek

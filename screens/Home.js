@@ -37,8 +37,10 @@ export default Home = ({navigation}) => {
     
     //Indicates that a transaction was added
     const [addedTransaction, setAddedTransaction] = useState(true)
+    const [addedCategory, setAddedCategory] = useState(true)
 
-    const [transactions, setTransactions] = useState([])
+    const [transactions, setTransactions] = useState(null)
+    const [categories, setCategories] = useState(null)
     const {signOut, getUserName} = useContext(AuthContext)
 
 
@@ -47,32 +49,40 @@ export default Home = ({navigation}) => {
     useEffect(()=>{
 
         //Gets the transaction
-        getTransactions()
+        getUser()
 
         //Fix to clear the state when the component unloads
         
         
-    },[addedTransaction])
+    },[addedTransaction, addedCategory])
 
     //Functions to open hide form
     const hideForm = () => setShowForm(false)
     const openForm = () => setShowForm(true)
 
     //Function to get Transactions
-    const getTransactions = async()=>{
+    const getUser = async()=>{
         //getting the user naem
         const username = getUserName()
         try{
             const {data} = await axios.get(`${API_BASE}/transactions/user/${username}`)
             const userData = await axios.get(`${API_BASE}/users/${username}`)
+            const catData = await axios.get(`${API_BASE}/categories/user/${username}`)
 
-            console.log(`\nGetting Transactions . . .`)
-            console.log(data)
+            console.log('Got the categories 🤙')
+            console.log(catData.data)
+
             await setTransactions(data)
+            //-------
+            await setCategories(catData.data)
             setBalance(userData.data.balance)
             setNameOfUser(userData.data.name)
             setIncomes(data.filter(tran => tran.type === 'income'))
             setExpenses(data.filter(tran => tran.type === 'expense'))
+
+            console.log('\n\n\n\nGetting transactions . . . \n\n\n\n')
+            console.log(incomes)
+            console.log(expenses)
 
         }catch(err){
             console.log(err)
@@ -90,8 +100,8 @@ export default Home = ({navigation}) => {
             <View style={Containers.main}>
             <AvailBalance balance={balance} prevBalance={0} interval={'week'}/>
 
-            <IncomePie incomes={incomes}/>
-            <ExpensePie expenses={expenses}/>
+            <IncomePie incomes={incomes} categories={categories}/>
+            <ExpensePie expenses={expenses} categories={categories}/>
             <IncomeChart incomes={incomes}/>
             <ExpenseChart expenses={expenses}/>
 
@@ -122,7 +132,8 @@ export default Home = ({navigation}) => {
             }
             {
                 showMenu
-                ?   <Menu setShowMenu={setShowMenu} nameOfUser={nameOfUser} navigation={navigation}/>
+                ?   <Menu
+                    setShowMenu={setShowMenu} nameOfUser={nameOfUser} navigation={navigation}/>
                 :   null
             }
             {

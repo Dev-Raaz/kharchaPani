@@ -117,7 +117,7 @@ export default SignIn = ({navigation}) => {
                 : null
             }
 
-            <TouchableOpacity style={FormInputs.forgotPwd}>
+            <TouchableOpacity style={FormInputs.forgotPwd} onPress={()=>navigation.navigate('OTPVerification')}>
                 <Text style={FormInputs.forgotPwdTxt}>Forgot Password ?</Text>
             </TouchableOpacity>
 

@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from '../screens/Onboarding'
 import SignIn from '../screens/auth/SignIn';
 import SignUp from '../screens/auth/SignUp';
+import OTPVerification from '../screens/forgot/OTPVerification';
+import GetNewPassword from '../screens/forgot/GetNewPassword';
 
 
 const Stack = createNativeStackNavigator()
@@ -40,6 +42,25 @@ const AuthStack = ({}) => {
                 } 
             />
 
+            <Stack.Screen
+                name='OTPVerification'
+                component={OTPVerification}
+                options={
+                    {
+                        title: 'Verify Yourself'
+                    }
+                } 
+            />
+
+            <Stack.Screen
+                name='GetNewPassword'
+                component={GetNewPassword}
+                options={
+                    {
+                        headerShown: false
+                    }
+                }
+            />
         </Stack.Navigator>
     )
 }

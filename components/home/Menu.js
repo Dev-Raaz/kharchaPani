@@ -15,7 +15,7 @@ import { AuthContext } from '../context'
 import axios from 'axios'
 import API_BASE from '../../config/api'
 
-const Menu = ({setShowMenu, nameOfUser, navigation}) => {
+const Menu = ({setShowMenu, nameOfUser, setAddedCategory, addedCategory, navigation}) => {
 
 
     const [success, setSuccess] = useState(null)
@@ -34,11 +34,17 @@ const Menu = ({setShowMenu, nameOfUser, navigation}) => {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={()=>navigation.navigate('AddCategory')}>
+            <TouchableOpacity onPress={()=>navigation.navigate('AddCategory',{
+                setAddedCategory: setAddedCategory,
+                addedCategory: addedCategory
+            })}>
                 <Text>Add Category</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={()=>navigation.navigate('RemoveCategory')}>
+            <TouchableOpacity onPress={()=>navigation.navigate('RemoveCategory',{
+                setAddedCategory: setAddedCategory,
+                addedCategory: addedCategory
+            })}>
                 <Text>Remove Categories</Text>
             </TouchableOpacity>
 
